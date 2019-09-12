@@ -3,7 +3,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css">
-
+<h1 align=center>Hackerthon Leaderboard</h1>
 <table id="personDataTable" class="table table-striped table-bordered" align=center>
     <tr>
         <th>Standing</th>
@@ -12,6 +12,10 @@
     </tr>
 
 </table>
+
+<div id='footer' class="footer">
+    Last Updated: <span id="timestamp">September 11, 2019 @ 18:00 GMT</span>
+</div>
 
 <style>
 table {
@@ -35,19 +39,40 @@ tr:nth-child(even) {
   background-color: #FFFFFF;
   color: #000000;
 }
+#footer
+{
+ position: absolute;
+ bottom: 0;
+ width: 99%;
+ height: 70px;
+ text-align: center;
+}
 </style>
 
 
 <script type="text/javascript">
   var standing = 1
-
   var showData = $('#show-data');
 
-  $.getJSON('https://raw.githubusercontent.com/jsimoni/scrape-security-innovation-scoreboard/master/current_score.json', function drawTable (data) {
+  var unix_timestamp = 1568301361973
+  var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+  var today = new Date(unix_timestamp).toLocaleString(undefined, dateStyle='long', timeStyle='long');
+  var today = new Date(unix_timestamp).toLocaleString(undefined, options);
+  alert(today);
+
+//https://raw.githubusercontent.com/jsimoni/scrape-security-innovation-scoreboard/master/current_score.json
+//file:///C:/Users/jsimoni/github/security-aws-scripts/python-scripts/current_score.json
+
+  $.getJSON('current_score.json', function drawTable (data) {
     console.log(data);
 
-    for (var i = 0; i < data.index.length; i++) {
-        drawRow(data.index[i], data.data[i]);
+    for (var i = 0; i < data.data.length; i++) {
+      //drawRow(data.index[i], data.data[i]);
+        drawRow(data.data[i][0], data.data[i][2]);
+        var unix_timestamp = data.data[i][1]
+        var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+        var today = new Date(unix_timestamp).toLocaleString(undefined, dateStyle='long', timeStyle='long');
+        document.getElementById("timestamp").textContent = today;
     }
   });
 
@@ -60,4 +85,16 @@ tr:nth-child(even) {
   }
 
 </script>
+
+<script>
+jQuery(document).ready(function() {
+ var contentHeight = jQuery(window).height();
+ var footerHeight = jQuery('.footer').height();
+ var footerTop = jQuery('.footer').position().top + footerHeight;
+ if (footerTop < contentHeight) {
+     jQuery('.footer').css('margin-top', 10+ (contentHeight - footerTop) + 'px');
+   }
+ });
+</script>
+
 </html>
