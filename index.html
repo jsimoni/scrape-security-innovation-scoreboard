@@ -48,29 +48,22 @@ tr:nth-child(even) {
  text-align: center;
 }
 </style>
-
-
 <script type="text/javascript">
   var standing = 1
   var showData = $('#show-data');
 
-  var unix_timestamp = 1568301361973
-  var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-  var today = new Date(unix_timestamp).toLocaleString(undefined, dateStyle='long', timeStyle='long');
-  var today = new Date(unix_timestamp).toLocaleString(undefined, options);
-  alert(today);
-
 //https://raw.githubusercontent.com/jsimoni/scrape-security-innovation-scoreboard/master/current_score.json
 //file:///C:/Users/jsimoni/github/security-aws-scripts/python-scripts/current_score.json
 
-  $.getJSON('current_score.json', function drawTable (data) {
+  $.getJSON('https://raw.githubusercontent.com/jsimoni/scrape-security-innovation-scoreboard/master/current_score.json', function drawTable (data) {
     console.log(data);
+
+    var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
 
     for (var i = 0; i < data.data.length; i++) {
       //drawRow(data.index[i], data.data[i]);
         drawRow(data.data[i][0], data.data[i][2]);
         var unix_timestamp = data.data[i][1]
-        var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
         var today = new Date(unix_timestamp).toLocaleString(undefined, dateStyle='long', timeStyle='long');
         document.getElementById("timestamp").textContent = today;
     }
